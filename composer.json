@@ -1,0 +1,39 @@
+{
+	"name": "kdyby/doctrine-magic-accessors",
+	"type": "library",
+	"description": "Fast-prototyping magic accessors trait for Doctrine entitites",
+	"keywords": ["kdyby", "doctrine", "orm", "dbal", "magic", "accessors"],
+	"homepage": "http://kdyby.org",
+	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+	"authors": [
+		{
+			"name": "Filip Procházka",
+			"homepage": "http://filip-prochazka.com",
+			"email": "filip@prochazka.su"
+		}
+	],
+	"support": {
+		"email": "filip@prochazka.su",
+		"issues": "https://github.com/Kdyby/DoctrineMagicAccessors/issues"
+	},
+	"require": {
+		"php": ">=5.4",
+		"kdyby/doctrine-collections-readonly": "~0.1@dev"
+	},
+	"require-dev": {
+		"nette/tester": "~1.7"
+	},
+	"autoload": {
+		"psr-0": {
+			"Kdyby\\DoctrineMagicAccessors\\": "src/"
+		},
+		"classmap": [
+			"src/exceptions.php"
+		]
+	},
+	"autoload-dev": {
+		"classmap": [
+			"tests"
+		]
+	}
+}
