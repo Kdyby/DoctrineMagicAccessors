@@ -15,7 +15,7 @@ Installation
 The best way to install Kdyby/DoctrineMagicAccessors is using  [Composer](http://getcomposer.org/):
 
 ```sh
-$ composer require kdyby/kdyby/doctrine-magic-accessors
+$ composer require kdyby/doctrine-magic-accessors
 ```
 
 
