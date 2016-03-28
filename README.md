@@ -1,7 +1,7 @@
 Kdyby/DoctrineMagicAccessors
 ======
 
-Fast-prototyping magic accessors trait for Doctrine entitites.
+Fast-prototyping magic accessors trait for Doctrine entities.
 
 [![Build Status](https://travis-ci.org/Kdyby/DoctrineMagicAccessors.svg?branch=master)](https://travis-ci.org/Kdyby/DoctrineMagicAccessors)
 [![Downloads this Month](https://img.shields.io/packagist/dm/kdyby/doctrine-magic-accessors.svg)](https://packagist.org/packages/kdyby/doctrine-magic-accessors)

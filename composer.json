@@ -1,7 +1,7 @@
 {
 	"name": "kdyby/doctrine-magic-accessors",
 	"type": "library",
-	"description": "Fast-prototyping magic accessors trait for Doctrine entitites",
+	"description": "Fast-prototyping magic accessors trait for Doctrine entities",
 	"keywords": ["kdyby", "doctrine", "orm", "dbal", "magic", "accessors"],
 	"homepage": "http://kdyby.org",
 	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
