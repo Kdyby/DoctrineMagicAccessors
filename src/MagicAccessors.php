@@ -33,10 +33,9 @@ trait MagicAccessors
 
 	/**
 	 * @param string $property property name
-	 * @param array $args
 	 * @return Collection|array
 	 */
-	protected function convertCollection($property, array $args = NULL)
+	protected function convertCollection($property)
 	{
 		return new ReadOnlyCollectionWrapper($this->$property);
 	}
@@ -99,7 +98,7 @@ trait MagicAccessors
 
 			} elseif ($op === 'get' && isset($properties[$prop])) {
 				if ($this->$prop instanceof Collection) {
-					return $this->convertCollection($prop, $args);
+					return $this->convertCollection($prop);
 
 				} else {
 					return $this->$prop;
