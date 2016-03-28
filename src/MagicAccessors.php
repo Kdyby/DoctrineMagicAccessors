@@ -6,18 +6,10 @@
  * For the full copyright and license information, please view the file license.txt that was distributed with this source code.
  */
 
-namespace Kdyby\Doctrine\Entities;
+namespace Kdyby\DoctrineMagicAccessors;
 
-use Doctrine;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Kdyby;
-use Kdyby\Doctrine\Collections\ReadOnlyCollectionWrapper;
-use Kdyby\Doctrine\MemberAccessException;
-use Kdyby\Doctrine\UnexpectedValueException;
-use Nette;
-use Nette\Utils\Callback;
-use Nette\Utils\ObjectMixin;
+use Kdyby\DoctrineCollectionsReadonly\ReadOnlyCollectionWrapper;
 
 
 
@@ -53,6 +45,7 @@ trait MagicAccessors
 
 	/**
 	 * Utility method, that can be replaced with `::class` since php 5.5
+	 * @deprecated
 	 * @return string
 	 */
 	public static function getClassName()
@@ -65,12 +58,11 @@ trait MagicAccessors
 	/**
 	 * Access to reflection.
 	 *
-	 * @return Nette\Reflection\ClassType|\ReflectionClass
+	 * @return \ReflectionClass
 	 */
 	public static function getReflection()
 	{
-		$class = class_exists('Nette\Reflection\ClassType') ? 'Nette\Reflection\ClassType' : 'ReflectionClass';
-		return new $class(get_called_class());
+		return new \ReflectionClass(get_called_class());
 	}
 
 
@@ -220,7 +212,7 @@ trait MagicAccessors
 			if ($rp->isPublic() && !$rp->isStatic()) {
 				if (is_array($list = $this->$name) || $list instanceof \Traversable) {
 					foreach ($list as $handler) {
-						Callback::invokeArgs($handler, $args);
+						call_user_func_array($handler, $args);
 					}
 				} elseif ($list !== NULL) {
 					throw UnexpectedValueException::invalidEventValue($list, $this, $name);
@@ -232,9 +224,7 @@ trait MagicAccessors
 
 		// extension methods
 		if ($cb = static::extensionMethod($name)) {
-			/** @var \Nette\Callback $cb */
 			array_unshift($args, $this);
-
 			return call_user_func_array($cb, $args);
 		}
 
@@ -246,14 +236,14 @@ trait MagicAccessors
 	/**
 	 * Call to undefined static method.
 	 *
-	 * @param  string  method name (in lower case!)
-	 * @param  array   arguments
+	 * @param string $name method name (in lower case!)
+	 * @param array $args arguments
 	 * @return mixed
 	 * @throws MemberAccessException
 	 */
 	public static function __callStatic($name, $args)
 	{
-		return ObjectMixin::callStatic(get_called_class(), $name, $args);
+		throw MemberAccessException::undefinedStaticMethodCall(get_called_class(), $name);
 	}
 
 
@@ -261,23 +251,30 @@ trait MagicAccessors
 	/**
 	 * Adding method to class.
 	 *
-	 * @param  string  method name
-	 * @param  callable
+	 * @param string $name method name
+	 * @param callable $callback
 	 * @return mixed
 	 */
 	public static function extensionMethod($name, $callback = NULL)
 	{
+		if (!class_exists('Nette\ObjectMixin')) {
+			return NULL;
+		}
+
 		if (strpos($name, '::') === FALSE) {
 			$class = get_called_class();
 		} else {
 			list($class, $name) = explode('::', $name);
 			$class = (new \ReflectionClass($class))->getName();
 		}
+
 		if ($callback === NULL) {
-			return ObjectMixin::getExtensionMethod($class, $name);
+			return \Nette\ObjectMixin::getExtensionMethod($class, $name);
 		} else {
-			ObjectMixin::setExtensionMethod($class, $name, $callback);
+			\Nette\ObjectMixin::setExtensionMethod($class, $name, $callback);
 		}
+
+		return NULL;
 	}
 
 
@@ -304,7 +301,7 @@ trait MagicAccessors
 		$methods = $this->listObjectMethods();
 		if (isset($methods[$m])) {
 			// ampersands:
-			// - uses &__get() because declaration should be forward compatible (e.g. with Nette\Utils\Html)
+			// - uses &__get() because declaration should be forward compatible
 			// - doesn't call &$_this->$m because user could bypass property setter by: $x = & $obj->property; $x = 'new value';
 			$val = $this->$m();
 
@@ -413,13 +410,13 @@ trait MagicAccessors
 	/**
 	 * Access to undeclared property.
 	 *
-	 * @param  string  property name
+	 * @param string $name property name
 	 * @return void
 	 * @throws MemberAccessException
 	 */
 	public function __unset($name)
 	{
-		ObjectMixin::remove($this, $name);
+		throw MemberAccessException::cannotUnset($this, $name);
 	}
 
 
