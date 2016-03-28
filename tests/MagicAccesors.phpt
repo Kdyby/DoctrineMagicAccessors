@@ -1,23 +1,15 @@
 <?php
 
 /**
- * Test: Kdyby\Doctrine\Entity\MagicAccessors.
- *
- * @testCase KdybyTests\Doctrine\MagicAccessorsTest
- * @author Filip Procházka <filip@prochazka.su>
- * @package Kdyby\Doctrine
+ * @testCase
  */
 
-namespace KdybyTests\Doctrine;
+namespace KdybyTests\DoctrineMagicAccessors;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Kdyby\Doctrine\Entities\BaseEntity;
-use Kdyby;
-use Nette;
 use Tester;
 use Tester\Assert;
 
-require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/bootstrap.php';
 
 
 
@@ -32,7 +24,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			unset($entity->one);
-		}, 'Nette\MemberAccessException', 'Cannot unset the property KdybyTests\Doctrine\BadlyNamedEntity::$one.');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Cannot unset the property KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::$one.');
 	}
 
 
@@ -42,7 +34,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			unset($entity->two);
-		}, 'Nette\MemberAccessException', 'Cannot unset the property KdybyTests\Doctrine\BadlyNamedEntity::$two.');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Cannot unset the property KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::$two.');
 	}
 
 
@@ -66,7 +58,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->one;
-		}, 'Kdyby\Doctrine\MemberAccessException', 'Cannot read an undeclared property KdybyTests\Doctrine\BadlyNamedEntity::$one.');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Cannot read an undeclared property KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::$one.');
 	}
 
 
@@ -84,7 +76,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->ones;
-		}, 'Kdyby\Doctrine\MemberAccessException', 'Cannot read an undeclared property KdybyTests\Doctrine\BadlyNamedEntity::$ones.');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Cannot read an undeclared property KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::$ones.');
 	}
 
 
@@ -94,12 +86,12 @@ class MagicAccessorsTest extends Tester\TestCase
 		$entity = new BadlyNamedEntity();
 
 		Assert::equal($entity->twos, $entity->getTwos());
-		Assert::type('Kdyby\Doctrine\Collections\ReadOnlyCollectionWrapper', $entity->twos);
-		Assert::type('Kdyby\Doctrine\Collections\ReadOnlyCollectionWrapper', $entity->getTwos());
+		Assert::type('Kdyby\DoctrineCollectionsReadonly\ReadOnlyCollectionWrapper', $entity->twos);
+		Assert::type('Kdyby\DoctrineCollectionsReadonly\ReadOnlyCollectionWrapper', $entity->getTwos());
 
 		Assert::equal($entity->proxies, $entity->getProxies());
-		Assert::type('Kdyby\Doctrine\Collections\ReadOnlyCollectionWrapper', $entity->proxies);
-		Assert::type('Kdyby\Doctrine\Collections\ReadOnlyCollectionWrapper', $entity->getProxies());
+		Assert::type('Kdyby\DoctrineCollectionsReadonly\ReadOnlyCollectionWrapper', $entity->proxies);
+		Assert::type('Kdyby\DoctrineCollectionsReadonly\ReadOnlyCollectionWrapper', $entity->getProxies());
 	}
 
 
@@ -109,7 +101,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->one = 1;
-		}, 'Kdyby\Doctrine\MemberAccessException', 'Cannot write to an undeclared property KdybyTests\Doctrine\BadlyNamedEntity::$one.');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Cannot write to an undeclared property KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::$one.');
 	}
 
 
@@ -128,7 +120,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->ones = 1;
-		}, 'Kdyby\Doctrine\MemberAccessException', 'Cannot write to an undeclared property KdybyTests\Doctrine\BadlyNamedEntity::$ones.');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Cannot write to an undeclared property KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::$ones.');
 	}
 
 
@@ -138,7 +130,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->twos = 1;
-		}, 'Kdyby\Doctrine\UnexpectedValueException', 'Class property KdybyTests\Doctrine\BadlyNamedEntity::$twos is an instance of Doctrine\Common\Collections\Collection. Use add<property>() and remove<property>() methods to manipulate it or declare your own.');
+		}, 'Kdyby\DoctrineMagicAccessors\UnexpectedValueException', 'Class property KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::$twos is an instance of Doctrine\Common\Collections\Collection. Use add<property>() and remove<property>() methods to manipulate it or declare your own.');
 	}
 
 
@@ -148,7 +140,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->proxies = 1;
-		}, 'Kdyby\Doctrine\UnexpectedValueException', 'Class property KdybyTests\Doctrine\BadlyNamedEntity::$proxies is an instance of Doctrine\Common\Collections\Collection. Use add<property>() and remove<property>() methods to manipulate it or declare your own.');
+		}, 'Kdyby\DoctrineMagicAccessors\UnexpectedValueException', 'Class property KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::$proxies is an instance of Doctrine\Common\Collections\Collection. Use add<property>() and remove<property>() methods to manipulate it or declare your own.');
 	}
 
 
@@ -158,7 +150,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->setOne(1);
-		}, 'Kdyby\Doctrine\MemberAccessException', 'Call to undefined method KdybyTests\Doctrine\BadlyNamedEntity::setOne().');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Call to undefined method KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::setOne().');
 	}
 
 
@@ -185,7 +177,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->setOnes(1);
-		}, 'Kdyby\Doctrine\MemberAccessException', 'Call to undefined method KdybyTests\Doctrine\BadlyNamedEntity::setOnes().');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Call to undefined method KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::setOnes().');
 	}
 
 
@@ -195,7 +187,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->setTwos(2);
-		}, 'Kdyby\Doctrine\UnexpectedValueException', 'Class property KdybyTests\Doctrine\BadlyNamedEntity::$twos is an instance of Doctrine\Common\Collections\Collection. Use add<property>() and remove<property>() methods to manipulate it or declare your own.');
+		}, 'Kdyby\DoctrineMagicAccessors\UnexpectedValueException', 'Class property KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::$twos is an instance of Doctrine\Common\Collections\Collection. Use add<property>() and remove<property>() methods to manipulate it or declare your own.');
 	}
 
 
@@ -205,7 +197,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->setProxies(3);
-		}, 'Kdyby\Doctrine\UnexpectedValueException', 'Class property KdybyTests\Doctrine\BadlyNamedEntity::$proxies is an instance of Doctrine\Common\Collections\Collection. Use add<property>() and remove<property>() methods to manipulate it or declare your own.');
+		}, 'Kdyby\DoctrineMagicAccessors\UnexpectedValueException', 'Class property KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::$proxies is an instance of Doctrine\Common\Collections\Collection. Use add<property>() and remove<property>() methods to manipulate it or declare your own.');
 	}
 
 
@@ -215,7 +207,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->getOne();
-		}, 'Kdyby\Doctrine\MemberAccessException', 'Call to undefined method KdybyTests\Doctrine\BadlyNamedEntity::getOne().');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Call to undefined method KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::getOne().');
 	}
 
 
@@ -233,7 +225,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->getOnes();
-		}, 'Kdyby\Doctrine\MemberAccessException', 'Call to undefined method KdybyTests\Doctrine\BadlyNamedEntity::getOnes().');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Call to undefined method KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::getOnes().');
 	}
 
 
@@ -252,7 +244,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->thousand(1000);
-		}, 'Kdyby\Doctrine\MemberAccessException', 'Call to undefined method KdybyTests\Doctrine\BadlyNamedEntity::thousand().');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Call to undefined method KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::thousand().');
 	}
 
 
@@ -262,7 +254,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->addOne((object) ['id' => 1]);
-		}, 'Kdyby\Doctrine\MemberAccessException', 'Call to undefined method KdybyTests\Doctrine\BadlyNamedEntity::addOne().');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Call to undefined method KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::addOne().');
 	}
 
 
@@ -272,7 +264,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->addFour((object) ['id' => 4]);
-		}, 'Kdyby\Doctrine\UnexpectedValueException', 'Class property KdybyTests\Doctrine\BadlyNamedEntity::$four is not an instance of Doctrine\Common\Collections\Collection.');
+		}, 'Kdyby\DoctrineMagicAccessors\UnexpectedValueException', 'Class property KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::$four is not an instance of Doctrine\Common\Collections\Collection.');
 	}
 
 
@@ -298,7 +290,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->hasOne((object) ['id' => 1]);
-		}, 'Kdyby\Doctrine\MemberAccessException', 'Call to undefined method KdybyTests\Doctrine\BadlyNamedEntity::hasOne().');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Call to undefined method KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::hasOne().');
 	}
 
 
@@ -308,7 +300,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->hasFour((object) ['id' => 4]);
-		}, 'Kdyby\Doctrine\UnexpectedValueException', 'Class property KdybyTests\Doctrine\BadlyNamedEntity::$four is not an instance of Doctrine\Common\Collections\Collection.');
+		}, 'Kdyby\DoctrineMagicAccessors\UnexpectedValueException', 'Class property KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::$four is not an instance of Doctrine\Common\Collections\Collection.');
 	}
 
 
@@ -335,7 +327,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->removeOne((object) ['id' => 1]);
-		}, 'Kdyby\Doctrine\MemberAccessException', 'Call to undefined method KdybyTests\Doctrine\BadlyNamedEntity::removeOne().');
+		}, 'Kdyby\DoctrineMagicAccessors\MemberAccessException', 'Call to undefined method KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::removeOne().');
 	}
 
 
@@ -345,7 +337,7 @@ class MagicAccessorsTest extends Tester\TestCase
 		Assert::exception(function () {
 			$entity = new BadlyNamedEntity();
 			$entity->removeFour((object) ['id' => 4]);
-		}, 'Kdyby\Doctrine\UnexpectedValueException', 'Class property KdybyTests\Doctrine\BadlyNamedEntity::$four is not an instance of Doctrine\Common\Collections\Collection.');
+		}, 'Kdyby\DoctrineMagicAccessors\UnexpectedValueException', 'Class property KdybyTests\DoctrineMagicAccessors\BadlyNamedEntity::$four is not an instance of Doctrine\Common\Collections\Collection.');
 	}
 
 
@@ -404,125 +396,5 @@ class MagicAccessorsTest extends Tester\TestCase
 
 
 
-/**
- * @author Filip Procházka <filip@prochazka.su>
- * @method setTwo()
- * @method addTwo()
- * @method getTwo()
- * @method removeTwo()
- * @method hasTwo()
- * @method \Doctrine\Common\Collections\ArrayCollection getTwos()
- * @method addProxy()
- * @method hasProxy()
- * @method removeProxy()
- * @method \Doctrine\Common\Collections\ArrayCollection getProxies()
- */
-class BadlyNamedEntity
-{
 
-	use Kdyby\Doctrine\Entities\MagicAccessors;
-
-	/**
-	 * @var array events
-	 */
-	private $onSomething = [];
-
-	/**
-	 * @var object
-	 */
-	private $one;
-
-	/**
-	 * @var object
-	 */
-	protected $two;
-
-	/**
-	 * @var object
-	 */
-	protected $four;
-
-	/**
-	 * @var \Doctrine\Common\Collections\ArrayCollection
-	 */
-	protected $buses;
-
-	/**
-	 * @var object
-	 */
-	public $three;
-
-	/**
-	 * @var \Doctrine\Common\Collections\ArrayCollection
-	 */
-	private $ones;
-
-	/**
-	 * @var \Doctrine\Common\Collections\ArrayCollection
-	 */
-	protected $twos;
-
-	/**
-	 * @var \Doctrine\Common\Collections\ArrayCollection
-	 */
-	protected $proxies;
-
-	/**
-	 * @var \Doctrine\Common\Collections\ArrayCollection
-	 */
-	public $threes;
-
-	/**
-	 * @var int
-	 */
-	protected $something = 2;
-
-
-
-	public function __construct()
-	{
-		$this->one = (object) ['id' => 1];
-		$this->two = (object) ['id' => 2];
-		$this->three = (object) ['id' => 3];
-
-		$this->ones = new ArrayCollection([(object) ['id' => 1]]);
-		$this->twos = new ArrayCollection([(object) ['id' => 2]]);
-		$this->proxies = new ArrayCollection([(object) ['id' => 3]]);
-		$this->threes = new ArrayCollection([(object) ['id' => 4]]);
-
-		$this->buses = new ArrayCollection();
-	}
-
-
-
-	/**
-	 * @param int $something
-	 */
-	public function setSomething($something)
-	{
-		$this->something = (int) ceil($something / 2);
-	}
-
-
-
-	/**
-	 * @return int
-	 */
-	public function getSomething()
-	{
-		return $this->something * 2;
-	}
-
-
-
-	/**
-	 * @return int
-	 */
-	public function getRealSomething()
-	{
-		return $this->something;
-	}
-
-}
-
-\run(new MagicAccessorsTest());
+(new MagicAccessorsTest())->run();
