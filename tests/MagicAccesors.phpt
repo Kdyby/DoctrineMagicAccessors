@@ -86,12 +86,12 @@ class MagicAccessorsTest extends Tester\TestCase
 		$entity = new BadlyNamedEntity();
 
 		Assert::equal($entity->twos, $entity->getTwos());
-		Assert::type('Kdyby\DoctrineCollectionsReadonly\ReadOnlyCollectionWrapper', $entity->twos);
-		Assert::type('Kdyby\DoctrineCollectionsReadonly\ReadOnlyCollectionWrapper', $entity->getTwos());
+		Assert::type('Kdyby\Doctrine\Collections\Readonly\ReadOnlyCollectionWrapper', $entity->twos);
+		Assert::type('Kdyby\Doctrine\Collections\Readonly\ReadOnlyCollectionWrapper', $entity->getTwos());
 
 		Assert::equal($entity->proxies, $entity->getProxies());
-		Assert::type('Kdyby\DoctrineCollectionsReadonly\ReadOnlyCollectionWrapper', $entity->proxies);
-		Assert::type('Kdyby\DoctrineCollectionsReadonly\ReadOnlyCollectionWrapper', $entity->getProxies());
+		Assert::type('Kdyby\Doctrine\Collections\Readonly\ReadOnlyCollectionWrapper', $entity->proxies);
+		Assert::type('Kdyby\Doctrine\Collections\Readonly\ReadOnlyCollectionWrapper', $entity->getProxies());
 	}
 
 

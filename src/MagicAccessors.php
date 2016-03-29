@@ -9,7 +9,7 @@
 namespace Kdyby\DoctrineMagicAccessors;
 
 use Doctrine\Common\Collections\Collection;
-use Kdyby\DoctrineCollectionsReadonly\ReadOnlyCollectionWrapper;
+use Kdyby\Doctrine\Collections\Readonly\ReadOnlyCollectionWrapper;
 
 
 
@@ -76,8 +76,8 @@ trait MagicAccessors
 	 * @param string $name method name
 	 * @param array $args arguments
 	 *
-	 * @throws \Kdyby\Doctrine\UnexpectedValueException
-	 * @throws \Kdyby\Doctrine\MemberAccessException
+	 * @throws \Kdyby\DoctrineMagicAccessors\UnexpectedValueException
+	 * @throws \Kdyby\DoctrineMagicAccessors\MemberAccessException
 	 * @return mixed
 	 */
 	public function __call($name, $args)
