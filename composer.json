@@ -25,7 +25,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Kdyby\\DoctrineMagicAccessors\\": "src/"
+			"Kdyby\\Doctrine\\MagicAccessors\\": "src/"
 		},
 		"classmap": [
 			"src/exceptions.php"

@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the file license.txt that was distributed with this source code.
  */
 
-namespace Kdyby\DoctrineMagicAccessors;
+namespace Kdyby\Doctrine\MagicAccessors;
 
 use Doctrine\Common\Collections\Collection;
 use Kdyby\Doctrine\Collections\Readonly\ReadOnlyCollectionWrapper;

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the file license.txt that was distributed with this source code.
  */
 
-namespace KdybyTests\DoctrineMagicAccessors;
+namespace KdybyTests\Doctrine\MagicAccessors;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby;
@@ -32,7 +32,7 @@ use Tester\Assert;
 class BadlyNamedEntity
 {
 
-	use Kdyby\DoctrineMagicAccessors\MagicAccessors;
+	use Kdyby\Doctrine\MagicAccessors\MagicAccessors;
 
 	/**
 	 * @var array events
