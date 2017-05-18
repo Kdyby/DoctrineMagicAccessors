@@ -1,0 +1,4 @@
+parameters:
+	ignoreErrors:
+		- '#Call to static method (get|set)ExtensionMethod\(\) on an unknown class Nette\\ObjectMixin#'
+		- '#Class Nette\\ObjectMixin not found#'
