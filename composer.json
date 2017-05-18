@@ -17,8 +17,8 @@
 		"issues": "https://github.com/Kdyby/DoctrineMagicAccessors/issues"
 	},
 	"require": {
-		"php": ">=5.4",
-		"kdyby/doctrine-collections-readonly": "~0.2@dev"
+		"php": "^5.6 || ^7.0",
+		"kdyby/doctrine-collections-readonly": "^1.0@dev"
 	},
 	"require-dev": {
 		"nette/tester": "~1.7"
