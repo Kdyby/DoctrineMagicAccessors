@@ -76,8 +76,8 @@ trait MagicAccessors
 	 * @param string $name method name
 	 * @param array $args arguments
 	 *
-	 * @throws \Kdyby\DoctrineMagicAccessors\UnexpectedValueException
-	 * @throws \Kdyby\DoctrineMagicAccessors\MemberAccessException
+	 * @throws \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException
+	 * @throws \Kdyby\Doctrine\MagicAccessors\MemberAccessException
 	 * @return mixed
 	 */
 	public function __call($name, $args)
