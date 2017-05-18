@@ -394,7 +394,4 @@ class MagicAccessorsTest extends Tester\TestCase
 
 }
 
-
-
-
 (new MagicAccessorsTest())->run();
