@@ -256,7 +256,7 @@ trait MagicAccessors
 	 */
 	public static function extensionMethod($name, $callback = NULL)
 	{
-		if (!class_exists('Nette\ObjectMixin')) {
+		if (!class_exists(\Nette\ObjectMixin::class)) {
 			return NULL;
 		}
 
