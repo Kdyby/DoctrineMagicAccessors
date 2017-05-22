@@ -10,175 +10,144 @@
 
 namespace Kdyby\Doctrine\MagicAccessors;
 
+use Doctrine\Common\Collections\Collection;
+
 interface Exception
 {
 
 }
 
-
-/**
- * @author Filip Procházka <filip@prochazka.su>
- */
-class UnexpectedValueException extends \UnexpectedValueException implements Exception
+class UnexpectedValueException extends \UnexpectedValueException implements \Kdyby\Doctrine\MagicAccessors\Exception
 {
 
 	/**
 	 * @param mixed $list
 	 * @param string|object $class
 	 * @param string $property
-	 *
-	 * @return UnexpectedValueException
+	 * @return \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException
 	 */
 	public static function invalidEventValue($list, $class, $property)
 	{
 		$class = is_object($class) ? get_class($class) : $class;
-		return new static("Property $class::$$property must be array or NULL, " . gettype($list) . " given.");
+		return new static(sprintf('Property %s::$%s must be array or NULL, %s given.', $class, $property, gettype($list)));
 	}
-
-
 
 	/**
 	 * @param string|object $class
 	 * @param string $property
-	 *
-	 * @return UnexpectedValueException
+	 * @return \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException
 	 */
 	public static function notACollection($class, $property)
 	{
 		$class = is_object($class) ? get_class($class) : $class;
-		return new static("Class property $class::\$$property is not an instance of Doctrine\\Common\\Collections\\Collection.");
+		return new static(sprintf('Class property %s::$%s is not an instance of %s.', $class, $property, Collection::class));
 	}
-
-
 
 	/**
 	 * @param string|object $class
 	 * @param string $property
-	 *
-	 * @return UnexpectedValueException
+	 * @return \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException
 	 */
 	public static function collectionCannotBeReplaced($class, $property)
 	{
 		$class = is_object($class) ? get_class($class) : $class;
-		return new static("Class property $class::\$$property is an instance of Doctrine\\Common\\Collections\\Collection. Use add<property>() and remove<property>() methods to manipulate it or declare your own.");
+		return new static(sprintf(
+			'Class property %s::$%s is an instance of %s. Use add<property>() and remove<property>() methods to manipulate it or declare your own.',
+			$class,
+			$property,
+			Collection::class
+		));
 	}
 
 }
 
-
-
-/**
- * @author Filip Procházka <filip@prochazka.su>
- */
-class MemberAccessException extends \LogicException implements Exception
+class MemberAccessException extends \LogicException implements \Kdyby\Doctrine\MagicAccessors\Exception
 {
 
 	/**
 	 * @param string $type
 	 * @param string|object $class
 	 * @param string $property
-	 *
-	 * @return MemberAccessException
+	 * @return \Kdyby\Doctrine\MagicAccessors\MemberAccessException
 	 */
 	public static function propertyNotWritable($type, $class, $property)
 	{
 		$class = is_object($class) ? get_class($class) : $class;
-		return new static("Cannot write to $type property $class::\$$property.");
+		return new static(sprintf('Cannot write to %s property %s::$%s.', $type, $class, $property));
 	}
-
-
 
 	/**
 	 * @param string|object $class
-	 *
-	 * @return MemberAccessException
+	 * @return \Kdyby\Doctrine\MagicAccessors\MemberAccessException
 	 */
 	public static function propertyWriteWithoutName($class)
 	{
 		$class = is_object($class) ? get_class($class) : $class;
-		return new static("Cannot write to a class '$class' property without name.");
+		return new static(sprintf('Cannot write to a class %s property without name.', $class));
 	}
-
-
 
 	/**
 	 * @param string $type
 	 * @param string|object $class
 	 * @param string $property
-	 *
-	 * @return MemberAccessException
+	 * @return \Kdyby\Doctrine\MagicAccessors\MemberAccessException
 	 */
 	public static function propertyNotReadable($type, $class, $property)
 	{
 		$class = is_object($class) ? get_class($class) : $class;
-		return new static("Cannot read $type property $class::\$$property.");
+		return new static(sprintf('Cannot read %s property %s::$%s.', $type, $class, $property));
 	}
-
-
 
 	/**
 	 * @param string|object $class
-	 *
-	 * @return MemberAccessException
+	 * @return \Kdyby\Doctrine\MagicAccessors\MemberAccessException
 	 */
 	public static function propertyReadWithoutName($class)
 	{
 		$class = is_object($class) ? get_class($class) : $class;
-		return new static("Cannot read a class '$class' property without name.");
+		return new static(sprintf('Cannot read a class %s property without name.', $class));
 	}
-
-
 
 	/**
 	 * @param string|object $class
-	 *
-	 * @return MemberAccessException
+	 * @return \Kdyby\Doctrine\MagicAccessors\MemberAccessException
 	 */
 	public static function callWithoutName($class)
 	{
 		$class = is_object($class) ? get_class($class) : $class;
-		return new static("Call to class '$class' method without name.");
+		return new static(sprintf('Call to class %s method without name.', $class));
 	}
-
-
 
 	/**
 	 * @param object|string $class
 	 * @param string $method
-	 *
-	 * @return MemberAccessException
+	 * @return \Kdyby\Doctrine\MagicAccessors\MemberAccessException
 	 */
 	public static function undefinedMethodCall($class, $method)
 	{
 		$class = is_object($class) ? get_class($class) : $class;
-		return new static("Call to undefined method $class::$method().");
+		return new static(sprintf('Call to undefined method %s::%s().', $class, $method));
 	}
-
-
 
 	/**
 	 * @param string $class
 	 * @param string $method
-	 *
-	 * @return MemberAccessException
+	 * @return \Kdyby\Doctrine\MagicAccessors\MemberAccessException
 	 */
 	public static function undefinedStaticMethodCall($class, $method)
 	{
-		return new static("Call to undefined static method $class::$method().");
+		return new static(sprintf('Call to undefined static method %s::%s().', $class, $method));
 	}
-
-
 
 	/**
 	 * @param object|string $class
 	 * @param string $property
-	 *
-	 * @return MemberAccessException
+	 * @return \Kdyby\Doctrine\MagicAccessors\MemberAccessException
 	 */
 	public static function cannotUnset($class, $property)
 	{
 		$class = is_object($class) ? get_class($class) : $class;
-		return new static("Cannot unset the property $class::\$$property.");
+		return new static(sprintf('Cannot unset the property %s::$%s.', $class, $property));
 	}
 
 }

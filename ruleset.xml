@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<ruleset name="Kdyby/DoctrineMagicAccessors">
+	<rule ref="vendor/kdyby/coding-standard/KdybyCodingStandard/ruleset-5.6.xml"/>
+
+	<rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
+		<exclude-pattern>src/MagicAccessors.php</exclude-pattern>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements">
+		<exclude-pattern>tests/data/BadlyNamedEntity.php</exclude-pattern>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition">
+		<!-- fuck it, I don't wanna restructure it -->
+		<exclude-pattern>src/MagicAccessors.php</exclude-pattern>
+	</rule>
+</ruleset>

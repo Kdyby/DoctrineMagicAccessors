@@ -10,12 +10,12 @@ namespace Kdyby\Doctrine\MagicAccessors;
 
 use Doctrine\Common\Collections\Collection;
 use Kdyby\Doctrine\Collections\Readonly\ReadOnlyCollectionWrapper;
+use Nette\ObjectMixin;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionProperty;
+use Traversable;
 
-
-
-/**
- * @author Filip Procházka <filip@prochazka.su>
- */
 trait MagicAccessors
 {
 
@@ -29,21 +29,18 @@ trait MagicAccessors
 	 */
 	private static $__methods = [];
 
-
-
 	/**
 	 * @param string $property property name
-	 * @return Collection|array
+	 * @return \Doctrine\Common\Collections\Collection|array
 	 */
 	protected function convertCollection($property)
 	{
 		return new ReadOnlyCollectionWrapper($this->$property);
 	}
 
-
-
 	/**
 	 * Utility method, that can be replaced with `::class` since php 5.5
+	 *
 	 * @deprecated
 	 * @return string
 	 */
@@ -52,8 +49,6 @@ trait MagicAccessors
 		return get_called_class();
 	}
 
-
-
 	/**
 	 * Access to reflection.
 	 *
@@ -61,10 +56,8 @@ trait MagicAccessors
 	 */
 	public static function getReflection()
 	{
-		return new \ReflectionClass(get_called_class());
+		return new ReflectionClass(get_called_class());
 	}
-
-
 
 	/**
 	 * Allows the user to access through magic methods to protected and public properties.
@@ -75,7 +68,6 @@ trait MagicAccessors
 	 *
 	 * @param string $name method name
 	 * @param array $args arguments
-	 *
 	 * @throws \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException
 	 * @throws \Kdyby\Doctrine\MagicAccessors\MemberAccessException
 	 * @return mixed
@@ -89,7 +81,7 @@ trait MagicAccessors
 			$prop = strtolower($name[3]) . substr($name, 4);
 			if ($op === 'set' && isset($properties[$prop])) {
 				if ($this->$prop instanceof Collection) {
-					throw UnexpectedValueException::collectionCannotBeReplaced($this, $prop);
+					throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::collectionCannotBeReplaced($this, $prop);
 				}
 
 				$this->$prop = $args[0];
@@ -108,7 +100,7 @@ trait MagicAccessors
 				if ($op === 'add') {
 					if (isset($properties[$prop . 's'])) {
 						if (!$this->{$prop . 's'} instanceof Collection) {
-							throw UnexpectedValueException::notACollection($this, $prop . 's');
+							throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::notACollection($this, $prop . 's');
 						}
 
 						$this->{$prop . 's'}->add($args[0]);
@@ -117,7 +109,7 @@ trait MagicAccessors
 
 					} elseif (substr($prop, -1) === 'y' && isset($properties[$prop = substr($prop, 0, -1) . 'ies'])) {
 						if (!$this->$prop instanceof Collection) {
-							throw UnexpectedValueException::notACollection($this, $prop);
+							throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::notACollection($this, $prop);
 						}
 
 						$this->$prop->add($args[0]);
@@ -126,7 +118,7 @@ trait MagicAccessors
 
 					} elseif (substr($prop, -1) === 's' && isset($properties[$prop = substr($prop, 0, -1) . 'ses'])) {
 						if (!$this->$prop instanceof Collection) {
-							throw UnexpectedValueException::notACollection($this, $prop);
+							throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::notACollection($this, $prop);
 						}
 
 						$this->$prop->add($args[0]);
@@ -134,33 +126,33 @@ trait MagicAccessors
 						return $this;
 
 					} elseif (isset($properties[$prop])) {
-						throw UnexpectedValueException::notACollection($this, $prop);
+						throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::notACollection($this, $prop);
 					}
 
 				} elseif ($op === 'has') {
 					if (isset($properties[$prop . 's'])) {
 						if (!$this->{$prop . 's'} instanceof Collection) {
-							throw UnexpectedValueException::notACollection($this, $prop . 's');
+							throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::notACollection($this, $prop . 's');
 						}
 
 						return $this->{$prop . 's'}->contains($args[0]);
 
 					} elseif (substr($prop, -1) === 'y' && isset($properties[$prop = substr($prop, 0, -1) . 'ies'])) {
 						if (!$this->$prop instanceof Collection) {
-							throw UnexpectedValueException::notACollection($this, $prop);
+							throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::notACollection($this, $prop);
 						}
 
 						return $this->$prop->contains($args[0]);
 
 					} elseif (substr($prop, -1) === 's' && isset($properties[$prop = substr($prop, 0, -1) . 'ses'])) {
 						if (!$this->$prop instanceof Collection) {
-							throw UnexpectedValueException::notACollection($this, $prop);
+							throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::notACollection($this, $prop);
 						}
 
 						return $this->$prop->contains($args[0]);
 
 					} elseif (isset($properties[$prop])) {
-						throw UnexpectedValueException::notACollection($this, $prop);
+						throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::notACollection($this, $prop);
 					}
 
 				} elseif (strlen($name) > 6 && ($op = substr($name, 0, 6)) === 'remove') {
@@ -168,7 +160,7 @@ trait MagicAccessors
 
 					if (isset($properties[$prop . 's'])) {
 						if (!$this->{$prop . 's'} instanceof Collection) {
-							throw UnexpectedValueException::notACollection($this, $prop . 's');
+							throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::notACollection($this, $prop . 's');
 						}
 
 						$this->{$prop . 's'}->removeElement($args[0]);
@@ -177,7 +169,7 @@ trait MagicAccessors
 
 					} elseif (substr($prop, -1) === 'y' && isset($properties[$prop = substr($prop, 0, -1) . 'ies'])) {
 						if (!$this->$prop instanceof Collection) {
-							throw UnexpectedValueException::notACollection($this, $prop);
+							throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::notACollection($this, $prop);
 						}
 
 						$this->$prop->removeElement($args[0]);
@@ -186,7 +178,7 @@ trait MagicAccessors
 
 					} elseif (substr($prop, -1) === 's' && isset($properties[$prop = substr($prop, 0, -1) . 'ses'])) {
 						if (!$this->$prop instanceof Collection) {
-							throw UnexpectedValueException::notACollection($this, $prop);
+							throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::notACollection($this, $prop);
 						}
 
 						$this->$prop->removeElement($args[0]);
@@ -194,27 +186,28 @@ trait MagicAccessors
 						return $this;
 
 					} elseif (isset($properties[$prop])) {
-						throw UnexpectedValueException::notACollection($this, $prop);
+						throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::notACollection($this, $prop);
 					}
 				}
 			}
 		}
 
 		if ($name === '') {
-			throw MemberAccessException::callWithoutName($this);
+			throw \Kdyby\Doctrine\MagicAccessors\MemberAccessException::callWithoutName($this);
 		}
 		$class = get_class($this);
 
 		// event functionality
 		if (preg_match('#^on[A-Z]#', $name) && property_exists($class, $name)) {
-			$rp = new \ReflectionProperty($this, $name);
+			$rp = new ReflectionProperty($this, $name);
 			if ($rp->isPublic() && !$rp->isStatic()) {
-				if (is_array($list = $this->$name) || $list instanceof \Traversable) {
+				$list = $this->$name;
+				if (is_array($list) || $list instanceof Traversable) {
 					foreach ($list as $handler) {
 						call_user_func_array($handler, $args);
 					}
 				} elseif ($list !== NULL) {
-					throw UnexpectedValueException::invalidEventValue($list, $this, $name);
+					throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::invalidEventValue($list, $this, $name);
 				}
 
 				return NULL;
@@ -222,15 +215,14 @@ trait MagicAccessors
 		}
 
 		// extension methods
-		if ($cb = static::extensionMethod($name)) {
+		$cb = static::extensionMethod($name);
+		if ($cb !== NULL) {
 			array_unshift($args, $this);
 			return call_user_func_array($cb, $args);
 		}
 
-		throw MemberAccessException::undefinedMethodCall($this, $name);
+		throw \Kdyby\Doctrine\MagicAccessors\MemberAccessException::undefinedMethodCall($this, $name);
 	}
-
-
 
 	/**
 	 * Call to undefined static method.
@@ -238,14 +230,12 @@ trait MagicAccessors
 	 * @param string $name method name (in lower case!)
 	 * @param array $args arguments
 	 * @return mixed
-	 * @throws MemberAccessException
+	 * @throws \Kdyby\Doctrine\MagicAccessors\MemberAccessException
 	 */
 	public static function __callStatic($name, $args)
 	{
-		throw MemberAccessException::undefinedStaticMethodCall(get_called_class(), $name);
+		throw \Kdyby\Doctrine\MagicAccessors\MemberAccessException::undefinedStaticMethodCall(get_called_class(), $name);
 	}
-
-
 
 	/**
 	 * Adding method to class.
@@ -256,7 +246,7 @@ trait MagicAccessors
 	 */
 	public static function extensionMethod($name, $callback = NULL)
 	{
-		if (!class_exists(\Nette\ObjectMixin::class)) {
+		if (!class_exists(ObjectMixin::class)) {
 			return NULL;
 		}
 
@@ -264,32 +254,30 @@ trait MagicAccessors
 			$class = get_called_class();
 		} else {
 			list($class, $name) = explode('::', $name);
-			$class = (new \ReflectionClass($class))->getName();
+			$class = (new ReflectionClass($class))->getName();
 		}
 
 		if ($callback === NULL) {
-			return \Nette\ObjectMixin::getExtensionMethod($class, $name);
+			return ObjectMixin::getExtensionMethod($class, $name);
 		} else {
-			\Nette\ObjectMixin::setExtensionMethod($class, $name, $callback);
+			ObjectMixin::setExtensionMethod($class, $name, $callback);
 		}
 
 		return NULL;
 	}
-
-
 
 	/**
 	 * Returns property value. Do not call directly.
 	 *
 	 * @param string $name property name
 	 *
-	 * @throws MemberAccessException if the property is not defined.
+	 * @throws \Kdyby\Doctrine\MagicAccessors\MemberAccessException if the property is not defined.
 	 * @return mixed property value
 	 */
 	public function &__get($name)
 	{
 		if ($name === '') {
-			throw MemberAccessException::propertyReadWithoutName($this);
+			throw \Kdyby\Doctrine\MagicAccessors\MemberAccessException::propertyReadWithoutName($this);
 		}
 
 		// property getter support
@@ -316,7 +304,8 @@ trait MagicAccessors
 
 		// protected attribute support
 		$properties = $this->listObjectProperties();
-		if (isset($properties[$name = $originalName])) {
+		$name = $originalName;
+		if (isset($properties[$name])) {
 			if ($this->$name instanceof Collection) {
 				$coll = $this->convertCollection($name);
 
@@ -330,10 +319,8 @@ trait MagicAccessors
 		}
 
 		$type = isset($methods['set' . $name]) ? 'a write-only' : 'an undeclared';
-		throw MemberAccessException::propertyNotReadable($type, $this, $originalName);
+		throw \Kdyby\Doctrine\MagicAccessors\MemberAccessException::propertyNotReadable($type, $this, $originalName);
 	}
-
-
 
 	/**
 	 * Sets value of a property. Do not call directly.
@@ -341,13 +328,13 @@ trait MagicAccessors
 	 * @param string $name property name
 	 * @param mixed $value property value
 	 *
-	 * @throws UnexpectedValueException
-	 * @throws MemberAccessException if the property is not defined or is read-only
+	 * @throws \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException
+	 * @throws \Kdyby\Doctrine\MagicAccessors\MemberAccessException if the property is not defined or is read-only
 	 */
 	public function __set($name, $value)
 	{
 		if ($name === '') {
-			throw MemberAccessException::propertyWriteWithoutName($this);
+			throw \Kdyby\Doctrine\MagicAccessors\MemberAccessException::propertyWriteWithoutName($this);
 		}
 
 		// property setter support
@@ -364,9 +351,10 @@ trait MagicAccessors
 
 		// protected attribute support
 		$properties = $this->listObjectProperties();
-		if (isset($properties[$name = $originalName])) {
+		$name = $originalName;
+		if (isset($properties[$name])) {
 			if ($this->$name instanceof Collection) {
-				throw UnexpectedValueException::collectionCannotBeReplaced($this, $name);
+				throw \Kdyby\Doctrine\MagicAccessors\UnexpectedValueException::collectionCannotBeReplaced($this, $name);
 			}
 
 			$this->$name = $value;
@@ -375,10 +363,8 @@ trait MagicAccessors
 		}
 
 		$type = isset($methods['get' . $name]) || isset($methods['is' . $name]) ? 'a read-only' : 'an undeclared';
-		throw MemberAccessException::propertyNotWritable($type, $this, $originalName);
+		throw \Kdyby\Doctrine\MagicAccessors\MemberAccessException::propertyNotWritable($type, $this, $originalName);
 	}
-
-
 
 	/**
 	 * Is property defined?
@@ -404,21 +390,17 @@ trait MagicAccessors
 		return isset($methods['get' . $name]) || isset($methods['is' . $name]);
 	}
 
-
-
 	/**
 	 * Access to undeclared property.
 	 *
 	 * @param string $name property name
 	 * @return void
-	 * @throws MemberAccessException
+	 * @throws \Kdyby\Doctrine\MagicAccessors\MemberAccessException
 	 */
 	public function __unset($name)
 	{
-		throw MemberAccessException::cannotUnset($this, $name);
+		throw \Kdyby\Doctrine\MagicAccessors\MemberAccessException::cannotUnset($this, $name);
 	}
-
-
 
 	/**
 	 * Should return only public or protected properties of class
@@ -429,18 +411,16 @@ trait MagicAccessors
 	{
 		$class = get_class($this);
 		if (!isset(self::$__properties[$class])) {
-			$refl = new \ReflectionClass($class);
-			$properties = array_map(function (\ReflectionProperty $property) {
+			$refl = new ReflectionClass($class);
+			$properties = array_map(function (ReflectionProperty $property) {
 				return $property->getName();
-			}, $refl->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED));
+			}, $refl->getProperties(ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED));
 
 			self::$__properties[$class] = array_flip($properties);
 		}
 
 		return self::$__properties[$class];
 	}
-
-
 
 	/**
 	 * Should return all public methods of class
@@ -451,10 +431,10 @@ trait MagicAccessors
 	{
 		$class = get_class($this);
 		if (!isset(self::$__methods[$class])) {
-			$refl = new \ReflectionClass($class);
-			$methods = array_map(function (\ReflectionMethod $method) {
+			$refl = new ReflectionClass($class);
+			$methods = array_map(function (ReflectionMethod $method) {
 				return $method->getName();
-			}, $refl->getMethods(\ReflectionMethod::IS_PUBLIC));
+			}, $refl->getMethods(ReflectionMethod::IS_PUBLIC));
 
 			self::$__methods[$class] = array_flip($methods);
 		}

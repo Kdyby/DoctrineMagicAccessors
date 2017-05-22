@@ -11,13 +11,8 @@
 namespace KdybyTests\Doctrine\MagicAccessors;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Kdyby;
-use Tester;
-use Tester\Assert;
-
 
 /**
- * @author Filip Procházka <filip@prochazka.su>
  * @method setTwo()
  * @method addTwo()
  * @method getTwo()
@@ -32,12 +27,7 @@ use Tester\Assert;
 class BadlyNamedEntity
 {
 
-	use Kdyby\Doctrine\MagicAccessors\MagicAccessors;
-
-	/**
-	 * @var array events
-	 */
-	private $onSomething = [];
+	use \Kdyby\Doctrine\MagicAccessors\MagicAccessors;
 
 	/**
 	 * @var object
@@ -89,8 +79,6 @@ class BadlyNamedEntity
 	 */
 	protected $something = 2;
 
-
-
 	public function __construct()
 	{
 		$this->one = (object) ['id' => 1];
@@ -105,8 +93,6 @@ class BadlyNamedEntity
 		$this->buses = new ArrayCollection();
 	}
 
-
-
 	/**
 	 * @param int $something
 	 */
@@ -115,8 +101,6 @@ class BadlyNamedEntity
 		$this->something = (int) ceil($something / 2);
 	}
 
-
-
 	/**
 	 * @return int
 	 */
@@ -124,8 +108,6 @@ class BadlyNamedEntity
 	{
 		return $this->something * 2;
 	}
-
-
 
 	/**
 	 * @return int
